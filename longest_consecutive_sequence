@@ -1,0 +1,55 @@
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class productExceptSelf {
+    public static int longestConsecutiveSorting(int[] nums) {
+        if(nums.length == 0) return 0;
+
+        Arrays.sort(nums);
+
+        int currSeq = 1;
+        int maxSeq = 1;
+        for(int i=1; i<nums.length;i++){
+            if(nums[i] != nums[i-1]){
+                if(nums[i] == nums[i-1] + 1){
+                    currSeq++;
+                    maxSeq = Math.max(currSeq, maxSeq);
+                } else if(nums[i] != nums[i-1] + 1){
+                    currSeq = 1;
+                }
+            }
+        }
+        return maxSeq;
+
+    }
+
+    public static int longestConsecutiveOptimized(int[] nums) {
+        int maxSeq = 0;
+        int streak = 0;
+
+        Set<Integer> set = new HashSet<>();
+        for(int i=0; i<nums.length; i++) set.add(nums[i]);
+
+        //determine the start of my streak
+        for(int i=0; i<nums.length; i++){
+            if(!set.contains(nums[i] - 1)) {
+                int currentStart = nums[i];
+                streak=  1;
+
+                while(set.contains(currentStart + 1)){
+                    currentStart += 1;
+                    streak++;
+                }
+            }
+            maxSeq = Math.max(streak, maxSeq);
+
+        }
+        return maxSeq;
+    }
+
+    public static void main(String[] args) {
+        int[] test = {100,4,200,1,3,2};
+        System.out.println(longestConsecutiveOptimized(test));
+    }
+}
